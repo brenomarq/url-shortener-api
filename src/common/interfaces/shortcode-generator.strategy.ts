@@ -1,3 +1,3 @@
 export interface ShortcodeGeneratorStrategy {
-  generate(): string;
+  generate(length: number): string;
 }
