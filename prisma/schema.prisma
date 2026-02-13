@@ -6,7 +6,8 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -14,7 +15,8 @@ datasource db {
 }
 
 model Url {
-  shortCode   String   @id
+  id String @id @default(uuid())
+  shortCode   String   @unique @map("short_code")
   originalUrl String   @map("original_url")
   clicks      Int      @default(0)
   createdAt   DateTime @default(now()) @map("created_at")
