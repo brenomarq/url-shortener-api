@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/infrastructure/database/prisma.service';
+import { UrlRepository } from './url.repository';
 
 @Injectable()
-export class UrlService {}
+export class UrlService {
+  constructor(private readonly urlRepository: UrlRepository) {}
+}
