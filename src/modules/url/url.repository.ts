@@ -1,24 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { Url } from 'src/generated/prisma/client';
 import { PrismaService } from 'src/infrastructure/database/prisma.service';
+import { Url } from './entities/url.entity';
+import { UrlMapper } from './mappers/url.mapper';
 
 @Injectable()
 export class UrlRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async save(shortCode: string, originalUrl: string): Promise<Url> {
-    return await this.prisma.url.create({
+    const newUrl = await this.prisma.url.create({
       data: {
         shortCode,
         originalUrl,
       },
     });
+
+    return UrlMapper.toDomain(newUrl);
   }
 
   async findByShortCode(shortCode: string): Promise<Url | null> {
-    return await this.prisma.url.findUnique({
+    const url = await this.prisma.url.findUnique({
       where: { shortCode },
     });
+
+    if (!url) return null;
+
+    return UrlMapper.toDomain(url);
   }
 
   async incrementClicks(shortCode: string): Promise<void> {
