@@ -13,7 +13,7 @@ export class UrlService {
   ) {}
 
   async shortenUrl(originalUrl: string): Promise<Url> {
-    if (!this.isValidUrl) throw new Error('Invalid URL format');
+    if (!this.isValidUrl(originalUrl)) throw new Error('Invalid URL format');
 
     let shortCode: string;
     do {
