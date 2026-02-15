@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsUrl } from 'class-validator';
 
 export class ShortenUrlDto {
-  @IsString()
+  @IsUrl()
   @IsNotEmpty()
   readonly originalUrl: string;
 }
