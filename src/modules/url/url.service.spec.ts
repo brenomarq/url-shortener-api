@@ -20,6 +20,7 @@ describe('UrlService', () => {
           useValue: {
             save: jest.fn(),
             findByShortCode: jest.fn(),
+            incrementClicks: jest.fn(),
           },
         },
         {
@@ -74,19 +75,21 @@ describe('UrlService', () => {
       shortcodeGenerator.generate
         .mockReturnValueOnce(existingShortCode)
         .mockReturnValueOnce(newShortCode);
-        
+
       // First check returns a url (collision), second check returns null (available)
       urlRepository.findByShortCode
         .mockResolvedValueOnce(Url.restore(existingShortCode, validUrl, 0))
         .mockResolvedValueOnce(null);
-        
+
       urlRepository.save.mockResolvedValue(savedUrl);
 
       const result = await service.shortenUrl(validUrl);
 
       expect(shortcodeGenerator.generate).toHaveBeenCalledTimes(2);
       expect(urlRepository.findByShortCode).toHaveBeenCalledTimes(2);
-      expect(urlRepository.findByShortCode).toHaveBeenCalledWith(existingShortCode);
+      expect(urlRepository.findByShortCode).toHaveBeenCalledWith(
+        existingShortCode,
+      );
       expect(urlRepository.findByShortCode).toHaveBeenCalledWith(newShortCode);
       expect(urlRepository.save).toHaveBeenCalledWith(newShortCode, validUrl);
       expect(result).toEqual(savedUrl);
