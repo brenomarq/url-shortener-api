@@ -5,14 +5,11 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Post,
   Redirect,
-  Res,
 } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { ShortenUrlDto } from './dto/shorten-url.dto';
-import { url } from 'node:inspector';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('')

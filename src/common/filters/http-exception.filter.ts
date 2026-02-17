@@ -18,10 +18,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status: number = exception.getStatus();
     const exceptionResponse = exception.getResponse();
 
-    const message =
-      typeof exceptionResponse === 'object' && 'message' in exceptionResponse
-        ? (exceptionResponse as any).message
-        : exception.message;
+    let message = exception.message;
+
+    if (
+      typeof exceptionResponse === 'object' &&
+      exceptionResponse !== null &&
+      'message' in exceptionResponse
+    ) {
+      const responseMessage = (
+        exceptionResponse as { message: string | string[] }
+      ).message;
+      message = Array.isArray(responseMessage)
+        ? responseMessage.join(', ')
+        : responseMessage;
+    }
 
     this.logger.error(
       `Http Status: ${status} Error Message: ${JSON.stringify(message)}`,
