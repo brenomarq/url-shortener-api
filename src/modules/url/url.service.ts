@@ -26,6 +26,7 @@ export class UrlService {
   async getOriginalUrl(shortCode: string): Promise<Url> {
     const url = await this.urlRepository.findByShortCode(shortCode);
     if (!url) throw new NotFoundException('Url could not be found');
+    await this.urlRepository.incrementClicks(shortCode);
     return url;
   }
 
