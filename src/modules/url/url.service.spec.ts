@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { UrlService } from './url.service';
-import { UrlRepository } from './url.repository';
+import { PrismaUrlRepository } from './prisma-url.repository';
 import { SHORTCODE_GENERATOR } from 'src/infrastructure/providers/nanoid-generator.provider';
 import { ShortcodeGeneratorStrategy } from 'src/interfaces/shortcode-generator.strategy';
 import { NotFoundException } from '@nestjs/common';
@@ -9,7 +9,7 @@ import { Url } from './entities/url.entity';
 
 describe('UrlService', () => {
   let service: UrlService;
-  let urlRepository: jest.Mocked<UrlRepository>;
+  let urlRepository: jest.Mocked<PrismaUrlRepository>;
   let shortcodeGenerator: jest.Mocked<ShortcodeGeneratorStrategy>;
 
   beforeEach(async () => {
@@ -17,7 +17,7 @@ describe('UrlService', () => {
       providers: [
         UrlService,
         {
-          provide: UrlRepository,
+          provide: PrismaUrlRepository,
           useValue: {
             save: jest.fn(),
             findByShortCode: jest.fn(),
@@ -34,7 +34,7 @@ describe('UrlService', () => {
     }).compile();
 
     service = module.get<UrlService>(UrlService);
-    urlRepository = module.get(UrlRepository);
+    urlRepository = module.get(PrismaUrlRepository);
     shortcodeGenerator = module.get(SHORTCODE_GENERATOR);
   });
 

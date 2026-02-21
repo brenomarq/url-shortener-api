@@ -1,9 +1,10 @@
-import { Injectable, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import Redis from 'ioredis';
 
 @Injectable()
 export class RedisService implements OnModuleDestroy {
   private readonly client: Redis;
+  private readonly logger = new Logger(RedisService.name);
 
   constructor() {
     this.client = new Redis({
@@ -16,16 +17,41 @@ export class RedisService implements OnModuleDestroy {
     });
 
     this.client.on('connect', () => {
-      console.log('Connected to Redis');
+      this.logger.log('Connected to Redis Successfully!');
     });
 
     this.client.on('error', (err) => {
-      console.error('Redis error:', err);
+      this.logger.error('Error connecting to Redis');
     });
   }
 
-  getClient(): Redis {
-    return this.client;
+  async get(key: string): Promise<string | null> {
+    try {
+      return await this.client.get(key);
+    } catch {
+      this.logger.error('Could not find the key on Redis');
+      return null;
+    }
+  }
+
+  async set(key: string, value: string, ttlSeconds?: number): Promise<void> {
+    try {
+      if (ttlSeconds) {
+        await this.client.set(key, value, 'EX', ttlSeconds);
+      } else {
+        await this.client.set(key, value);
+      }
+    } catch {
+      this.logger.error('Error saving the key on Redis');
+    }
+  }
+
+  async delete(key: string): Promise<void> {
+    try {
+      await this.client.del(key);
+    } catch {
+      this.logger.error('Error trying to delete key on Redis');
+    }
   }
 
   async onModuleDestroy() {

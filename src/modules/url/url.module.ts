@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UrlController } from './url.controller';
 import { UrlService } from './url.service';
-import { UrlRepository } from './url.repository';
+import { PrismaUrlRepository } from './prisma-url.repository';
 import {
   NanoIdGenerator,
   SHORTCODE_GENERATOR,
@@ -11,7 +11,7 @@ import {
   controllers: [UrlController],
   providers: [
     UrlService,
-    UrlRepository,
+    PrismaUrlRepository,
     {
       provide: SHORTCODE_GENERATOR,
       useClass: NanoIdGenerator,

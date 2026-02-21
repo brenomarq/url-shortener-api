@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { UrlRepository } from './url.repository';
+import { PrismaUrlRepository } from './prisma-url.repository';
 import type { ShortcodeGeneratorStrategy } from 'src/interfaces/shortcode-generator.strategy';
 import { SHORTCODE_GENERATOR } from 'src/infrastructure/providers/nanoid-generator.provider';
 import { Url } from './entities/url.entity';
@@ -7,7 +7,7 @@ import { Url } from './entities/url.entity';
 @Injectable()
 export class UrlService {
   constructor(
-    private readonly urlRepository: UrlRepository,
+    private readonly urlRepository: PrismaUrlRepository,
     @Inject(SHORTCODE_GENERATOR)
     private readonly shortcodeGenerator: ShortcodeGeneratorStrategy,
   ) {}
