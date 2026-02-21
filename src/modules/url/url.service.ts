@@ -3,11 +3,16 @@ import { PrismaUrlRepository } from './prisma-url.repository';
 import type { ShortcodeGeneratorStrategy } from 'src/interfaces/shortcode-generator.strategy';
 import { SHORTCODE_GENERATOR } from 'src/infrastructure/providers/nanoid-generator.provider';
 import { Url } from './entities/url.entity';
+import {
+  URL_REPOSITORY_TOKEN,
+  type IUrlRepository,
+} from './interfaces/url.repository.interface';
 
 @Injectable()
 export class UrlService {
   constructor(
-    private readonly urlRepository: PrismaUrlRepository,
+    @Inject(URL_REPOSITORY_TOKEN)
+    private readonly urlRepository: IUrlRepository,
     @Inject(SHORTCODE_GENERATOR)
     private readonly shortcodeGenerator: ShortcodeGeneratorStrategy,
   ) {}

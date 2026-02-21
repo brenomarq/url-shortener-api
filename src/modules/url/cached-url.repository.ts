@@ -30,8 +30,6 @@ export class CachedUrlRepository implements IUrlRepository {
     }
 
     const url = await this.urlRepository.findByShortCode(shortCode);
-    if (!url) throw new NotFoundException('Url not found');
-
     return url;
   }
 
