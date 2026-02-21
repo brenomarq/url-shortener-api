@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/infrastructure/database/prisma.service';
 import { Url } from './entities/url.entity';
 import { UrlMapper } from './mappers/url.mapper';
+import { IUrlRepository } from './interfaces/url.repository.interface';
 
 @Injectable()
-export class UrlRepository {
+export class PrismaUrlRepository implements IUrlRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async save(shortCode: string, originalUrl: string): Promise<Url> {
